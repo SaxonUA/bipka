@@ -17,7 +17,6 @@
       align-items: center;
       gap: 3px;
       padding: 20px;
-      position: relative;
     }
 
     .header {
@@ -59,13 +58,12 @@
     }
 
     .footer {
-      margin-top: 10px;
-      color: white;
+      width: 190px;
+      text-align: right;
       font-size: 24px;
       font-weight: bold;
-      width: 100%;
-      text-align: right;
-      padding-right: 20px;
+      color: white;
+      margin-top: 4px;
     }
   </style>
 </head>
@@ -82,7 +80,7 @@
       <div class="cell cyan" id="saxon-damage">-</div>
       <div class="cell cyan" id="bipka-damage">-</div>
     </div>
-    <div class="footer" id="battles">Бої: -</div>
+    <div class="footer" id="battles">Бої: - / -</div>
   </div>
 
   <script>
@@ -107,14 +105,14 @@
       const bipkaShot = await fetchCell('F2');
       const saxonDamage = await fetchCell('A2');
       const bipkaDamage = await fetchCell('B2');
-      const battles = await fetchCell('C2');
-      const wins = await fetchCell('D2');
+      const saxonBattles = await fetchCell('C2');
+      const bipkaBattles = await fetchCell('D2');
 
       document.getElementById('saxon-shot').textContent = saxonShot;
       document.getElementById('bipka-shot').textContent = bipkaShot;
       document.getElementById('saxon-damage').textContent = saxonDamage;
       document.getElementById('bipka-damage').textContent = bipkaDamage;
-      document.getElementById('battles').textContent = `Бої: ${battles} / ${wins}`;
+      document.getElementById('battles').textContent = `Бої: ${saxonBattles} / ${bipkaBattles}`;
     }
 
     updateValues();
