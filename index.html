@@ -51,6 +51,12 @@
       font-weight: bold;
       text-shadow: 2px 2px 4px black;
       box-shadow: 0 0 8px rgba(0,0,0,0.6);
+      transition: box-shadow 0.4s ease, transform 0.4s ease;
+    }
+
+    .highlight-shadow {
+      box-shadow: 0 0 16px 6px black;
+      transform: scale(1.05);
     }
 
     .nickname {
@@ -61,12 +67,6 @@
 
     .value {
       font-size: 48px;
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-
-    .fade-change {
-      opacity: 0;
-      transform: scale(0.8);
     }
 
     .orange .value {
@@ -93,22 +93,22 @@
   <div class="container">
     <div class="header">НАЙКРАЩИЙ ПОСТРІЛ</div>
     <div class="row">
-      <div class="cell orange">
+      <div class="cell orange" id="saxon-shot-cell">
         <div class="nickname">Saxon</div>
         <div class="value" id="saxon-shot">-</div>
       </div>
-      <div class="cell orange">
+      <div class="cell orange" id="bipka-shot-cell">
         <div class="nickname">Bipka</div>
         <div class="value" id="bipka-shot">-</div>
       </div>
     </div>
     <div class="header">НАЙБІЛЬШЕ ДАМАГУ</div>
     <div class="row">
-      <div class="cell cyan">
+      <div class="cell cyan" id="saxon-damage-cell">
         <div class="nickname">Saxon</div>
         <div class="value" id="saxon-damage">-</div>
       </div>
-      <div class="cell cyan">
+      <div class="cell cyan" id="bipka-damage-cell">
         <div class="nickname">Bipka</div>
         <div class="value" id="bipka-damage">-</div>
       </div>
@@ -138,13 +138,26 @@
       return isNaN(num) ? value : num.toLocaleString('uk-UA');
     }
 
+    function updateCellHighlight(id1, id2, val1, val2) {
+      const cell1 = document.getElementById(id1);
+      const cell2 = document.getElementById(id2);
+
+      cell1.classList.remove('highlight-shadow');
+      cell2.classList.remove('highlight-shadow');
+
+      const n1 = parseInt(val1.toString().replace(/\s/g, '')) || 0;
+      const n2 = parseInt(val2.toString().replace(/\s/g, '')) || 0;
+
+      if (n1 > n2) {
+        cell1.classList.add('highlight-shadow');
+      } else if (n2 > n1) {
+        cell2.classList.add('highlight-shadow');
+      }
+    }
+
     function animateChange(el, newValue) {
       if (el.textContent === newValue) return;
-      el.classList.add('fade-change');
-      setTimeout(() => {
-        el.textContent = newValue;
-        el.classList.remove('fade-change');
-      }, 200); // тривалість fade
+      el.textContent = newValue;
     }
 
     async function updateValues() {
@@ -159,6 +172,9 @@
       animateChange(document.getElementById('saxon-damage'), saxonDamage);
       animateChange(document.getElementById('bipka-damage'), bipkaDamage);
       animateChange(document.getElementById('battles'), `Win: ${saxonBattles} %`);
+
+      updateCellHighlight('saxon-shot-cell', 'bipka-shot-cell', saxonShot, bipkaShot);
+      updateCellHighlight('saxon-damage-cell', 'bipka-damage-cell', saxonDamage, bipkaDamage);
     }
 
     updateValues();
