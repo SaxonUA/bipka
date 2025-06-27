@@ -105,6 +105,11 @@
       }
     }
 
+    function formatNumber(value) {
+      const num = parseInt(value);
+      return isNaN(num) ? value : num.toLocaleString('uk-UA');
+    }
+
     async function updateValues() {
       const saxonShot = await fetchCell('E2');
       const bipkaShot = await fetchCell('F2');
@@ -113,11 +118,11 @@
       const saxonBattles = await fetchCell('C2');
       const bipkaBattles = await fetchCell('D2');
 
-      document.getElementById('saxon-shot').textContent = saxonShot;
-      document.getElementById('bipka-shot').textContent = bipkaShot;
-      document.getElementById('saxon-damage').textContent = saxonDamage;
-      document.getElementById('bipka-damage').textContent = bipkaDamage;
-      document.getElementById('battles').textContent = `Бої: ${saxonBattles} / ${bipkaBattles}`;
+      document.getElementById('saxon-shot').textContent = formatNumber(saxonShot);
+      document.getElementById('bipka-shot').textContent = formatNumber(bipkaShot);
+      document.getElementById('saxon-damage').textContent = formatNumber(saxonDamage);
+      document.getElementById('bipka-damage').textContent = formatNumber(bipkaDamage);
+      document.getElementById('battles').textContent = `Бої: ${formatNumber(saxonBattles)} / ${formatNumber(bipkaBattles)}`;
     }
 
     updateValues();
