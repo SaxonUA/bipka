@@ -45,19 +45,29 @@
       width: 190px;
       height: 100px;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-      font-size: 48px;
+      align-items: center;
       font-weight: bold;
       text-shadow: 2px 2px 4px black;
       box-shadow: 0 0 8px rgba(0,0,0,0.6);
     }
 
-    .orange {
+    .nickname {
+      font-size: 14px;
+      color: white;
+      margin-bottom: 4px;
+    }
+
+    .value {
+      font-size: 48px;
+    }
+
+    .orange .value {
       color: orange;
     }
 
-    .cyan {
+    .cyan .value {
       color: cyan;
     }
 
@@ -77,13 +87,25 @@
   <div class="container">
     <div class="header">НАЙКРАЩИЙ ПОСТРІЛ</div>
     <div class="row">
-      <div class="cell orange" id="saxon-shot">-</div>
-      <div class="cell orange" id="bipka-shot">-</div>
+      <div class="cell orange">
+        <div class="nickname">Saxon</div>
+        <div class="value" id="saxon-shot">-</div>
+      </div>
+      <div class="cell orange">
+        <div class="nickname">Bipka</div>
+        <div class="value" id="bipka-shot">-</div>
+      </div>
     </div>
     <div class="header">НАЙБІЛЬШЕ ДАМАГУ</div>
     <div class="row">
-      <div class="cell cyan" id="saxon-damage">-</div>
-      <div class="cell cyan" id="bipka-damage">-</div>
+      <div class="cell cyan">
+        <div class="nickname">Saxon</div>
+        <div class="value" id="saxon-damage">-</div>
+      </div>
+      <div class="cell cyan">
+        <div class="nickname">Bipka</div>
+        <div class="value" id="bipka-damage">-</div>
+      </div>
     </div>
     <div class="footer" id="battles">Бої: - / -</div>
   </div>
