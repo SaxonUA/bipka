@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <title>Найкращий постріл і найбільше дамагу</title>
+  <title>WOT Tracker</title>
   <style>
     html, body {
       margin: 0;
@@ -15,12 +15,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 3px;
       padding: 20px;
+      position: relative;
     }
 
     .header {
-      background: rgba(68, 68, 68, 0.5); /* напівпрозорий */
+      background: rgba(68, 68, 68, 0.5);
       color: white;
       font-size: 28px;
       font-weight: bold;
@@ -32,12 +33,12 @@
 
     .row {
       display: flex;
-      gap: 5px;
+      gap: 4px;
       justify-content: center;
     }
 
     .cell {
-      background: rgba(68, 68, 68, 0.5); /* напівпрозорий */
+      background: rgba(68, 68, 68, 0.5);
       border: 2px solid orange;
       border-radius: 16px;
       width: 190px;
@@ -47,33 +48,78 @@
       justify-content: center;
       font-size: 48px;
       font-weight: bold;
+    }
+
+    .orange {
       color: orange;
     }
 
     .cyan {
-      color: #00ffff;
+      color: cyan;
+    }
+
+    .footer {
+      margin-top: 10px;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      width: 100%;
+      text-align: right;
+      padding-right: 20px;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-
-    <!-- Найкращий постріл -->
     <div class="header">НАЙКРАЩИЙ ПОСТРІЛ</div>
     <div class="row">
-      <div class="cell" id="saxon-shot">1 948</div>
-      <div class="cell" id="bipka-shot">1 752</div>
+      <div class="cell orange" id="saxon-shot">-</div>
+      <div class="cell orange" id="bipka-shot">-</div>
     </div>
-
-    <!-- Найбільше дамагу -->
     <div class="header">НАЙБІЛЬШЕ ДАМАГУ</div>
     <div class="row">
-      <div class="cell cyan" id="saxon-damage">8 547</div>
-      <div class="cell cyan" id="bipka-damage">7 852</div>
+      <div class="cell cyan" id="saxon-damage">-</div>
+      <div class="cell cyan" id="bipka-damage">-</div>
     </div>
-
+    <div class="footer" id="battles">Бої: -</div>
   </div>
+
+  <script>
+    const sheetId = '17phnEn-NW-OnrZg4DcW65r-Xoq6ScsdVjS5yL0SS3fk';
+    const sheetName = 'BS';
+
+    async function fetchCell(range) {
+      const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&range=${sheetName}!${range}`;
+      try {
+        const res = await fetch(url);
+        const text = await res.text();
+        const json = JSON.parse(text.substring(47).slice(0, -2));
+        return json.table.rows[0].c[0]?.v ?? '-';
+      } catch (e) {
+        console.error(`Помилка читання ${range}:`, e);
+        return '-';
+      }
+    }
+
+    async function updateValues() {
+      const saxonShot = await fetchCell('E2');
+      const bipkaShot = await fetchCell('F2');
+      const saxonDamage = await fetchCell('A2');
+      const bipkaDamage = await fetchCell('B2');
+      const battles = await fetchCell('C2');
+      const wins = await fetchCell('D2');
+
+      document.getElementById('saxon-shot').textContent = saxonShot;
+      document.getElementById('bipka-shot').textContent = bipkaShot;
+      document.getElementById('saxon-damage').textContent = saxonDamage;
+      document.getElementById('bipka-damage').textContent = bipkaDamage;
+      document.getElementById('battles').textContent = `Бої: ${battles} / ${wins}`;
+    }
+
+    updateValues();
+    setInterval(updateValues, 15000);
+  </script>
 
 </body>
 </html>
