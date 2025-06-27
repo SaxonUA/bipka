@@ -1,1 +1,79 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Найкращий постріл і найбільше дамагу</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      font-family: Arial, sans-serif;
+    }
 
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 20px;
+    }
+
+    .header {
+      background: #444;
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+      padding: 12px 40px;
+      border: 4px solid orange;
+      border-radius: 16px;
+      text-align: center;
+    }
+
+    .row {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+    }
+
+    .cell {
+      background: #444;
+      border: 4px solid orange;
+      border-radius: 16px;
+      width: 190px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: bold;
+      color: orange;
+    }
+
+    .cyan {
+      color: #00ffff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Найкращий постріл -->
+    <div class="header">НАЙКРАЩИЙ ПОСТРІЛ</div>
+    <div class="row">
+      <div class="cell" id="saxon-shot">1 948</div>
+      <div class="cell" id="bipka-shot">1 752</div>
+    </div>
+
+    <!-- Найбільше дамагу -->
+    <div class="header">НАЙБІЛЬШЕ ДАМАГУ</div>
+    <div class="row">
+      <div class="cell cyan" id="saxon-damage">8 547</div>
+      <div class="cell cyan" id="bipka-damage">7 852</div>
+    </div>
+
+  </div>
+
+</body>
+</html>
