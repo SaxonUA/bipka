@@ -80,13 +80,14 @@
       color: cyan;
     }
 
-    .footer {
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
       width: 380px;
-      text-align: right;
+      margin-top: 4px;
       font-size: 24px;
       font-weight: bold;
       color: white;
-      margin-top: 4px;
       text-shadow: 2px 2px 4px black;
     }
   </style>
@@ -116,7 +117,10 @@
         <div class="value" id="bipka-damage">-</div>
       </div>
     </div>
-    <div class="footer" id="battles">Win: </div>
+    <div class="footer-row">
+      <div id="battles-count">Бої: -</div>
+      <div id="battles-win">Win: -</div>
+    </div>
   </div>
 
   <script>
@@ -168,13 +172,15 @@
       const bipkaShot = formatNumber(await fetchCell('F2'));
       const saxonDamage = formatNumber(await fetchCell('A2'));
       const bipkaDamage = formatNumber(await fetchCell('B2'));
-      const saxonBattles = formatNumber(await fetchCell('G2'));
+      const totalBattles = formatNumber(await fetchCell('C2')); // Кількість боїв
+      const winPercent = formatNumber(await fetchCell('G2'));   // Win %
 
       animateChange(document.getElementById('saxon-shot'), saxonShot);
       animateChange(document.getElementById('bipka-shot'), bipkaShot);
       animateChange(document.getElementById('saxon-damage'), saxonDamage);
       animateChange(document.getElementById('bipka-damage'), bipkaDamage);
-      animateChange(document.getElementById('battles'), `Win: ${saxonBattles} %`);
+      animateChange(document.getElementById('battles-count'), `Бої: ${totalBattles}`);
+      animateChange(document.getElementById('battles-win'), `Win: ${winPercent} %`);
 
       updateCellHighlight('saxon-shot-cell', 'bipka-shot-cell', saxonShot, bipkaShot);
       updateCellHighlight('saxon-damage-cell', 'bipka-damage-cell', saxonDamage, bipkaDamage);
