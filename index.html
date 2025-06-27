@@ -107,7 +107,7 @@
         <div class="value" id="bipka-damage">-</div>
       </div>
     </div>
-    <div class="footer" id="battles">Бої: - / -</div>
+    <div class="footer" id="battles">Win: </div>
   </div>
 
   <script>
@@ -137,14 +137,13 @@
       const bipkaShot = await fetchCell('F2');
       const saxonDamage = await fetchCell('A2');
       const bipkaDamage = await fetchCell('B2');
-      const saxonBattles = await fetchCell('C2');
-      const bipkaBattles = await fetchCell('D2');
+      const saxonBattles = await fetchCell('G2');
 
       document.getElementById('saxon-shot').textContent = formatNumber(saxonShot);
       document.getElementById('bipka-shot').textContent = formatNumber(bipkaShot);
       document.getElementById('saxon-damage').textContent = formatNumber(saxonDamage);
       document.getElementById('bipka-damage').textContent = formatNumber(bipkaDamage);
-      document.getElementById('battles').textContent = `Бої: ${formatNumber(saxonBattles)} / ${formatNumber(bipkaBattles)}`;
+      document.getElementById('battles').textContent = `Win: ${formatNumber(saxonBattles)} %`;
     }
 
     updateValues();
