@@ -28,7 +28,7 @@
       padding: 20px;
       max-width: 700px;
       margin: 0 auto;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.0);
       border-radius: 10px;
     }
 
@@ -48,14 +48,14 @@
     }
 
     .team-logo {
-      width: 150px;
-      height: 150px;
+      width: 120px;
+      height: 120px;
       object-fit: contain;
     }
 
     .team-name {
       font-family: 'Russo One', sans-serif;
-      font-size: 55px;
+      font-size: 50px;
       text-shadow: 2px 2px 5px black;
     }
 
@@ -79,11 +79,11 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease-in-out;
-      min-width: 220px; /* ширший блок */
+      min-width: 220px;
     }
 
     .stat-box .label {
-      font-size: 18px; /* збільшено розмір тексту */
+      font-size: 18px;
       color: #ccc;
       margin-bottom: 6px;
     }
@@ -93,10 +93,15 @@
       font-weight: bold;
       color: orange;
       transition: all 0.3s ease-in-out;
+       text-shadow: 0 0 2px black;
     }
 
     .highlight {
       color: violet !important;
+    }
+
+    .highlight-border {
+      border: 2px solid white !important;
     }
 
     .value.animate {
@@ -183,16 +188,23 @@
     function updateHighlight(id1, id2, val1, val2) {
       const box1 = document.querySelector(`#${id1} .value`);
       const box2 = document.querySelector(`#${id2} .value`);
+      const stat1 = document.querySelector(`#${id1}`);
+      const stat2 = document.querySelector(`#${id2}`);
+
       box1.classList.remove('highlight');
       box2.classList.remove('highlight');
+      stat1.classList.remove('highlight-border');
+      stat2.classList.remove('highlight-border');
 
       const n1 = parseInt(val1.toString().replace(/\s/g, '')) || 0;
       const n2 = parseInt(val2.toString().replace(/\s/g, '')) || 0;
 
       if (n1 > n2) {
         box1.classList.add('highlight');
+        stat1.classList.add('highlight-border');
       } else if (n2 > n1) {
         box2.classList.add('highlight');
+        stat2.classList.add('highlight-border');
       }
     }
 
