@@ -17,7 +17,7 @@
       font-weight: bold;
       width: 100%;
       height: 100vh;
-      background: transparent; /* прозорий фон */
+      background: transparent;
       color: white;
     }
 
@@ -26,9 +26,9 @@
       flex-direction: column;
       gap: 20px;
       padding: 20px;
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
-      background: rgba(0, 0, 0, 0.6); /* напівпрозорий чорний */
+      background: rgba(0, 0, 0, 0.3);
       border-radius: 10px;
     }
 
@@ -36,7 +36,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(0, 0, 0, 0.6); /* блоки також напівпрозорі */
+      background: rgba(0, 0, 0, 0.3);
       padding: 10px;
       border-radius: 10px;
     }
@@ -48,30 +48,30 @@
     }
 
     .team-logo {
-      width: 60px;
-      height: 60px;
+      width: 150px;
+      height: 150px;
       object-fit: contain;
     }
 
     .team-name {
       font-family: 'Russo One', sans-serif;
-      font-size: 42px;
+      font-size: 55px;
       text-shadow: 2px 2px 5px black;
     }
 
     .stats {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
       align-items: center;
     }
 
     .stat-box {
-      background-color: rgba(0, 0, 0, 0.5); /* темний напівпрозорий */
+      background-color: rgba(0, 0, 0, 0.5);
       border: 1px solid rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(4px);
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-      padding: 10px 20px;
+      padding: 12px 24px;
       border-radius: 10px;
       text-align: center;
       display: flex;
@@ -79,13 +79,13 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease-in-out;
-      min-width: 160px;
+      min-width: 220px; /* ширший блок */
     }
 
     .stat-box .label {
-      font-size: 14px;
+      font-size: 18px; /* збільшено розмір тексту */
       color: #ccc;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .stat-box .value {
