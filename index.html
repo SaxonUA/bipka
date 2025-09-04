@@ -29,16 +29,15 @@
       font-size:60px; line-height:.9; letter-spacing:1px;
       z-index:1;
     }
-    /* ТАНК */
-    .tank{
-      position:absolute;
-      right:-28px;                       /* трохи виходить за межі */
-      top:-26px;
-      width:230px;                       /* підженеш під свій смак */
-      pointer-events:none;
-      filter: drop-shadow(0 10px 14px rgba(0,0,0,.6));
-      z-index:2;
-    }
+.tank{
+  position:absolute;
+  left:120px;     /* було right:-28px;  → тепер лівіше */
+  top:10px;       /* було top:-26px;   → опустив нижче */
+  width:230px;
+  pointer-events:none;
+  filter: drop-shadow(0 10px 14px rgba(0,0,0,.6));
+  z-index:2;
+}
 
     .grid{
       display:grid;
