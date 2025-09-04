@@ -19,12 +19,25 @@
     .wrap{width:530px; margin:0 auto}
 
     .header{
+      position:relative;                 /* потрібно для позиціювання танка */
       display:flex; align-items:flex-end; justify-content:space-between;
-      min-height:70px; margin-bottom:10px;
+      min-height:120px;                  /* більше місця під танк */
+      margin-bottom:10px;
     }
     .title{
       font-family:'Bebas Neue', sans-serif;
       font-size:60px; line-height:.9; letter-spacing:1px;
+      z-index:1;
+    }
+    /* ТАНК */
+    .tank{
+      position:absolute;
+      right:-28px;                       /* трохи виходить за межі */
+      top:-26px;
+      width:230px;                       /* підженеш під свій смак */
+      pointer-events:none;
+      filter: drop-shadow(0 10px 14px rgba(0,0,0,.6));
+      z-index:2;
     }
 
     .grid{
@@ -63,6 +76,8 @@
   <div class="wrap">
     <div class="header">
       <div class="title" id="title">WINDHUND</div>
+      <!-- Зображення танка. Файл має лежати поруч з HTML -->
+      <img class="tank" src="Windhund.png" alt="Windhund">
     </div>
 
     <div class="grid">
