@@ -1,197 +1,162 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <title>WOT Stats Overlay</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <title>OBZ • Прогрес місій</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      padding: 20px;
-      background: transparent;
-      font-family: 'Arial', sans-serif;
-      color: white;
+    :root{
+      --bg:#000; --text:#fff; --muted:#cfcfcf; --card:#0a0a0a;
+      --stroke:#cfcfcf; --accent:#ff9e00; --track:#3a3a3a;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; color:var(--text); background:var(--bg);
+      font-family: Montserrat, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      padding:18px;
     }
 
-    .player-block {
-      display: flex;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 20px;
-      padding: 20px;
-      margin-bottom: 30px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      max-width: 600px;
-      border: 1px solid white;
+    /* фіксована ширина під 3 картки 170px з невеликим gap */
+    .wrap{width:530px; margin:0 auto}
+
+    .header{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      min-height:70px; margin-bottom:10px;
+    }
+    .title{
+      font-family:'Bebas Neue', sans-serif;
+      font-size:60px; line-height:.9; letter-spacing:1px;
     }
 
-    .player-logo {
-      width: 180px;
-      height: 180px;
-      object-fit: contain;
-      margin-right: 20px;
-      filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.6));
+    .grid{
+      display:grid;
+      gap:4px;                          /* зменшений проміжок між картками */
+      grid-template-columns:repeat(3, 170px);
+      margin-bottom:14px;
+      justify-content:center;           /* без розтягування */
     }
+    .card{
+      background:var(--card);
+      border:2px solid var(--stroke); border-radius:14px;
+      padding:10px 12px;
+      width:170px; height:250px;
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
+    .card .head{font-weight:800; font-size:18px; margin-bottom:10px;}
+    .reading{display:flex; align-items:flex-end; gap:6px; line-height:1; margin-top:2px;}
+    .reading .num{font-family:'Bebas Neue', sans-serif; font-size:52px}
+    .reading .den{font-size:24px; color:#e6e6e6}
+    .bar{height:8px; width:100%; border-radius:999px; background:var(--track); overflow:hidden; margin-top:8px;}
+    .bar>span{display:block; height:100%; width:0%; background:var(--accent); transition:width .6s ease}
 
-    .player-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    /* текстові описи в картках */
+    .details{
+      font-size:12px; line-height:1.28; color:#ccc; margin-bottom:8px;
     }
-
-    .player-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 70px;
-      text-shadow: 3px 3px 6px black;
-      margin-bottom: 1px;
-      text-align: center;
-      width: 100%;
-    }
-
-    .stats-boxes {
-      display: flex;
-      gap: 20px;
-      width: 100%;
-      justify-content: center;
-    }
-
-    .stat-box {
-      flex: 1;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 15px;
-      padding: 10px 20px;
-      text-align: center;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
-      border: 2px solid orange;
-    }
-
-    .stat-label {
-      font-size: 18px;
-      color: #fcfcfc;
-      margin-bottom: 8px;
-    }
-
-    .stat-value {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 40px;
-      font-weight: bold;
-      text-shadow: 1px 1px 3px black;
-      color: orange;
-      transition: all 0.3s ease-in-out;
-    }
-
-    .glow {
-      background: linear-gradient(135deg, #ffffff, #f502ed);
-      background-size: 400% 400%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-      animation: glow-anim 4s ease-in-out infinite;
-    }
-
-    @keyframes glow-anim {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+    .gold{color:#ffcc00; font-weight:600;}
   </style>
 </head>
 <body>
+  <div class="wrap">
+    <div class="header">
+      <div class="title" id="title">WINDHUND</div>
+    </div>
 
-  <!-- SAXON -->
-  <div class="player-block">
-    <img class="player-logo" src="https://raw.githubusercontent.com/SaxonUA/wot-stats/main/saxon.png" alt="Saxon">
-    <div class="player-info">
-      <div class="player-name">SAXON</div>
-      <div class="stats-boxes">
-        <div class="stat-box">
-          <div class="stat-label">Найкращий постріл</div>
-          <div class="stat-value" id="saxon-shot">-</div>
+    <div class="grid">
+      <!-- Авангард -->
+      <div class="card">
+        <div>
+          <div class="head">Авангард</div>
+          <div class="details">
+            Важкий танк<br>
+            Середній танк<br>
+            ПТ-САУ<br><br>
+            <span class="gold">Прорив</span><br>
+            <span class="gold">Штурмовий</span><br>
+            <span class="gold">Універсальний</span>
+          </div>
         </div>
-        <div class="stat-box">
-          <div class="stat-label">Найбільше дамагу</div>
-          <div class="stat-value" id="saxon-damage">-</div>
+        <div>
+          <div class="reading"><span id="n-avg" class="num">0</span><span class="den">/15</span></div>
+          <div class="bar"><span id="b-avg"></span></div>
+        </div>
+      </div>
+
+      <!-- Засідка -->
+      <div class="card">
+        <div>
+          <div class="head">Засідка</div>
+          <div class="details">
+            Важкий танк<br>
+            Середній танк<br>
+            ПТ-САУ<br><br>
+            <span class="gold">Снайпер</span><br>
+            <span class="gold">Підтримка</span>
+          </div>
+        </div>
+        <div>
+          <div class="reading"><span id="n-zas" class="num">0</span><span class="den">/15</span></div>
+          <div class="bar"><span id="b-zas"></span></div>
+        </div>
+      </div>
+
+      <!-- Підтримка -->
+      <div class="card">
+        <div>
+          <div class="head">Підтримка</div>
+          <div class="details">
+            Легкий танк<br>
+            САУ
+          </div>
+        </div>
+        <div>
+          <div class="reading"><span id="n-pid" class="num">0</span><span class="den">/15</span></div>
+          <div class="bar"><span id="b-pid"></span></div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- ATAMAN -->
-  <div class="player-block">
-    <img class="player-logo" src="https://raw.githubusercontent.com/SaxonUA/wot-stats/main/ataman.png" alt="Ataman">
-    <div class="player-info">
-      <div class="player-name">ATAMAN</div>
-      <div class="stats-boxes">
-        <div class="stat-box">
-          <div class="stat-label">Найкращий постріл</div>
-          <div class="stat-value" id="ataman-shot">-</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-label">Найбільше дамагу</div>
-          <div class="stat-value" id="ataman-damage">-</div>
-        </div>
+    <!-- Загальний прогрес -->
+    <div class="card" style="width:100%; height:80px; flex-direction:column; justify-content:space-between;">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <div class="head" style="font-size:20px;">Виконано завдань</div>
+        <div class="reading"><span id="n-total" class="num">0</span><span class="den">/45</span></div>
       </div>
+      <div class="bar"><span id="b-total"></span></div>
     </div>
   </div>
 
   <script>
-    const SHEET_ID = '17phnEn-NW-OnrZg4DcW65r-Xoq6ScsdVjS5yL0SS3fk';
-    const SHEET_NAME = 'BS';
+    // Дані з Google Sheets
+    const SHEET_ID   = '17phnEn-NW-OnrZg4DcW65r-Xoq6ScsdVjS5yL0SS3fk';
+    const SHEET_NAME = 'OBZ';
+    const MAX_CARD   = 15, MAX_TOTAL = 45, INTERVAL_MS = 15000;
 
-    async function fetchCell(range) {
-      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&range=${SHEET_NAME}!${range}`;
-      try {
-        const res = await fetch(url);
-        const text = await res.text();
-        const json = JSON.parse(text.substring(47).slice(0, -2));
-        return json.table.rows[0].c[0]?.v ?? '-';
-      } catch (e) {
-        console.error(`Помилка читання ${range}:`, e);
-        return '-';
-      }
+    const toNum = v => (typeof v==='number')?v:(Number(String(v).replace(/[^\d.,-]/g,'').replace(',','.'))||0);
+    const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
+
+    async function fetchCell(a1){
+      const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?headers=0&tqx=out:json&range=${encodeURIComponent(SHEET_NAME+'!'+a1)}`;
+      const res=await fetch(url,{cache:'no-cache'}); const txt=await res.text();
+      const json=JSON.parse(txt.substring(47).slice(0,-2));
+      return json?.table?.rows?.[0]?.c?.[0]?.v ?? 0;
     }
-
-    function formatNumber(value) {
-      const num = parseInt(value);
-      return isNaN(num) ? value : num.toLocaleString('uk-UA');
+    function setCard(numId,barId,val,max){
+      const v=toNum(val);
+      document.getElementById(numId).textContent=v;
+      document.getElementById(barId).style.width=clamp((v/max)*100,0,100)+'%';
     }
-
-    function updateHighlight(id1, id2, val1, val2) {
-      const el1 = document.getElementById(id1);
-      const el2 = document.getElementById(id2);
-
-      el1.classList.remove('glow');
-      el2.classList.remove('glow');
-
-      const n1 = parseInt(val1.toString().replace(/\s/g, '')) || 0;
-      const n2 = parseInt(val2.toString().replace(/\s/g, '')) || 0;
-
-      if (n1 > n2) {
-        el1.classList.add('glow');
-      } else if (n2 > n1) {
-        el2.classList.add('glow');
-      }
+    async function update(){
+      try{
+        const [B2,D2,F2] = await Promise.all([fetchCell('B2'),fetchCell('D2'),fetchCell('F2')]);
+        const I2 = await fetchCell('I2');
+        setCard('n-avg','b-avg',B2,MAX_CARD);
+        setCard('n-zas','b-zas',D2,MAX_CARD);
+        setCard('n-pid','b-pid',F2,MAX_CARD);
+        setCard('n-total','b-total',I2,MAX_TOTAL);
+      }catch(e){ console.error(e); }
     }
-
-    async function updateOverlay() {
-      const saxonShot = formatNumber(await fetchCell('E2'));
-      const saxonDamage = formatNumber(await fetchCell('A2'));
-      const atamanShot = formatNumber(await fetchCell('F2'));
-      const atamanDamage = formatNumber(await fetchCell('B2'));
-
-      document.getElementById('saxon-shot').textContent = saxonShot;
-      document.getElementById('saxon-damage').textContent = saxonDamage;
-      document.getElementById('ataman-shot').textContent = atamanShot;
-      document.getElementById('ataman-damage').textContent = atamanDamage;
-
-      updateHighlight('saxon-shot', 'ataman-shot', saxonShot, atamanShot);
-      updateHighlight('saxon-damage', 'ataman-damage', saxonDamage, atamanDamage);
-    }
-
-    updateOverlay();
-    setInterval(updateOverlay, 15000);
+    update(); setInterval(update,INTERVAL_MS);
   </script>
-
 </body>
 </html>
