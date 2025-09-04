@@ -6,7 +6,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#000; --text:#fff; --muted:#cfcfcf; --card:#0a0a0a;
+      --bg:#000; --text:#fff; --muted:#cfcfcf;
       --stroke:#cfcfcf; --accent:#ff9e00; --track:#3a3a3a;
     }
     *{box-sizing:border-box}
@@ -16,7 +16,6 @@
       padding:18px;
     }
 
-    /* фіксована ширина під 3 картки 170px з невеликим gap */
     .wrap{width:530px; margin:0 auto}
 
     .header{
@@ -30,34 +29,34 @@
 
     .grid{
       display:grid;
-      gap:4px;                          /* зменшений проміжок між картками */
+      gap:4px;
       grid-template-columns:repeat(3, 170px);
       margin-bottom:14px;
-      justify-content:center;           /* без розтягування */
+      justify-content:center;
     }
-.card{
-  background:rgba(0,0,0,0.6); /* чорний напівпрозорий */
-  border:2px solid var(--stroke);
-  border-radius:14px;
-  padding:10px 12px;
-  width:170px;
-  height:250px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
+
+    .card{
+      background:rgba(0,0,0,0.6);              /* напівпрозорий чорний фон */
+      border:2px solid var(--stroke); border-radius:14px;
+      padding:10px 12px;
+      width:170px; height:250px;
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
     .card .head{font-weight:800; font-size:18px; margin-bottom:10px;}
-    .reading{display:flex; align-items:flex-end; gap:6px; line-height:1; margin-top:2px;}
+
+    .details{font-size:12px; line-height:1.28; color:#ccc; margin-bottom:8px;}
+    .gold-text{color:#ffcc00; font-weight:600;}
+
+    .reading{
+      display:flex; align-items:flex-end; justify-content:flex-end;
+      gap:6px; line-height:1; margin-top:2px; width:100%;
+    }
     .reading .num{font-family:'Bebas Neue', sans-serif; font-size:52px}
     .reading .den{font-size:24px; color:#e6e6e6}
+
     .bar{height:8px; width:100%; border-radius:999px; background:var(--track); overflow:hidden; margin-top:8px;}
     .bar>span{display:block; height:100%; width:0%; background:var(--accent); transition:width .6s ease}
-
-    /* текстові описи в картках */
-    .details{
-      font-size:12px; line-height:1.28; color:#ccc; margin-bottom:8px;
-    }
-    .gold{color:#ffcc00; font-weight:600;}
+    .bar.gold>span{background:#0fa8ab;}       /* ЗОЛОТИЙ для підсумку */
   </style>
 </head>
 <body>
@@ -75,9 +74,9 @@
             Важкий танк<br>
             Середній танк<br>
             ПТ-САУ<br><br>
-            <span class="gold">Прорив</span><br>
-            <span class="gold">Штурмовий</span><br>
-            <span class="gold">Універсальний</span>
+            <span class="gold-text">Прорив</span><br>
+            <span class="gold-text">Штурмовий</span><br>
+            <span class="gold-text">Універсальний</span>
           </div>
         </div>
         <div>
@@ -94,8 +93,8 @@
             Важкий танк<br>
             Середній танк<br>
             ПТ-САУ<br><br>
-            <span class="gold">Снайпер</span><br>
-            <span class="gold">Підтримка</span>
+            <span class="gold-text">Снайпер</span><br>
+            <span class="gold-text">Підтримка</span>
           </div>
         </div>
         <div>
@@ -120,13 +119,13 @@
       </div>
     </div>
 
-    <!-- Загальний прогрес -->
-    <div class="card" style="width:100%; height:80px; flex-direction:column; justify-content:space-between;">
+    <!-- Загальний прогрес із ЗОЛОТИМ баром -->
+    <div class="card" style="width:100%; height:96px; flex-direction:column; justify-content:space-between;">
       <div style="display:flex; align-items:center; justify-content:space-between;">
-        <div class="head" style="font-size:20px;">Виконано завдань</div>
+        <div class="head" style="font-size:20px; margin-bottom:0;">Виконано завдань</div>
         <div class="reading"><span id="n-total" class="num">0</span><span class="den">/45</span></div>
       </div>
-      <div class="bar"><span id="b-total"></span></div>
+      <div class="bar gold"><span id="b-total"></span></div>
     </div>
   </div>
 
@@ -145,22 +144,30 @@
       const json=JSON.parse(txt.substring(47).slice(0,-2));
       return json?.table?.rows?.[0]?.c?.[0]?.v ?? 0;
     }
+
     function setCard(numId,barId,val,max){
       const v=toNum(val);
       document.getElementById(numId).textContent=v;
-      document.getElementById(barId).style.width=clamp((v/max)*100,0,100)+'%';
+      const pct = clamp((v/max)*100, 0, 100);
+      document.getElementById(barId).style.width = pct + '%';
     }
+
     async function update(){
       try{
-        const [B2,D2,F2] = await Promise.all([fetchCell('B2'),fetchCell('D2'),fetchCell('F2')]);
+        const [B2,D2,F2] = await Promise.all([
+          fetchCell('B2'), fetchCell('D2'), fetchCell('F2')
+        ]);
         const I2 = await fetchCell('I2');
+
         setCard('n-avg','b-avg',B2,MAX_CARD);
         setCard('n-zas','b-zas',D2,MAX_CARD);
         setCard('n-pid','b-pid',F2,MAX_CARD);
         setCard('n-total','b-total',I2,MAX_TOTAL);
       }catch(e){ console.error(e); }
     }
-    update(); setInterval(update,INTERVAL_MS);
+
+    update();
+    setInterval(update, INTERVAL_MS);
   </script>
 </body>
 </html>
